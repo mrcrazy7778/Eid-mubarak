@@ -2,390 +2,345 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MR CRAZY | Elite Sim Database</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-body: #03050f;
-            --bg-card: #0a0e1f;
-            --primary: #00aaff;
-            --primary-hover: #0088dd;
-            --accent: #00eaff;
-            --text-main: #f0f4ff;
-            --text-sub: #7a8db0;
-            --border: #15203a;
+            --bg-body: #0a001f;
+            --bg-card: #12052b;
+            --primary: #00d4ff;
+            --accent: #ffd700;
+            --gold-glow: rgba(255,215,0,0.4);
+            --text-main: #f0f8ff;
+            --text-sub: #b0c4de;
+            --border: #2a1a4a;
             --whatsapp: #25D366;
-            --shadow-glow: 0 0 35px rgba(0, 170, 255, 0.35);
+            --shadow: 0 8px 32px rgba(0,212,255,0.15);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
         body {
             background: var(--bg-body);
             color: var(--text-main);
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: radial-gradient(circle at top, #0d1a38 0%, var(--bg-body) 70%);
-            padding: 20px;
+            padding: 15px 10px;
+            background-image: radial-gradient(circle at 30% 20%, rgba(0,212,255,0.08), transparent 40%);
         }
 
-        .app-container {
+        /* New Banner - Modern Islamic */
+        .ramzan-banner {
             width: 100%;
-            max-width: 440px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 35px 25px;
-            box-shadow: var(--shadow-glow), 0 15px 60px rgba(0,0,0,0.6);
+            max-width: 500px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #12052b, #0a001f);
+            border: 1px solid rgba(0,212,255,0.3);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow), 0 0 40px var(--gold-glow);
             position: relative;
             overflow: hidden;
         }
 
-        .app-container::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; right: -50%; bottom: -50%;
-            background: radial-gradient(circle, rgba(0,170,255,0.08) 10%, transparent 40%);
-            pointer-events: none;
-            animation: rotateGlow 25s linear infinite;
+        .banner-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.2rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px var(--gold-glow);
         }
 
-        @keyframes rotateGlow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .banner-location { font-size: 1.1rem; color: var(--primary); margin: 6px 0; font-weight: 500; }
+        .banner-roza { font-size: 1.4rem; color: var(--text-sub); margin: 6px 0; }
 
-        .logo-wrapper { text-align: center; margin-bottom: 25px; }
+        .times-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .time-card {
+            background: rgba(0,212,255,0.08);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 12px 20px;
+            min-width: 140px;
+        }
+
+        .time-label { font-size: 0.95rem; color: var(--text-sub); }
+        .time-value { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+
+        .countdown { font-size: 1.15rem; color: var(--accent); margin-top: 12px; font-weight: 600; }
+
+        /* Popup - Refined */
+        .ramzan-popup {
+            position: fixed;
+            inset: 0;
+            background: rgba(10,0,31,0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s ease;
+        }
+
+        .ramzan-popup.show { opacity: 1; visibility: visible; }
+
+        .popup-content {
+            background: linear-gradient(145deg, #12052b, #0a001f);
+            border: 2px solid var(--accent);
+            border-radius: 24px;
+            padding: 40px 30px;
+            max-width: 380px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 60px var(--gold-glow);
+            animation: popupFade 1s ease;
+        }
+
+        @keyframes popupFade { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+        .popup-moon { font-size: 6rem; color: var(--accent); text-shadow: 0 0 40px var(--gold-glow); margin-bottom: 15px; }
+        .popup-title { font-family: 'Amiri', serif; font-size: 3rem; color: var(--accent); margin: 10px 0; }
+        .arabic { font-size: 2.4rem; color: var(--primary); margin: 8px 0; }
+        .popup-text { font-size: 1.1rem; color: var(--text-sub); line-height: 1.5; }
+        .from-team { color: var(--accent); font-weight: 600; margin-top: 25px; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 2.2rem; color: var(--text-sub); cursor: pointer; }
+        .close-btn:hover { color: var(--accent); }
+
+        /* App Container - New Modern Card Style */
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            padding: 30px 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 80px;
+        }
 
         .logo-circle {
-            width: 110px;
-            height: 110px;
-            margin: 0 auto;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
             border-radius: 50%;
-            background: linear-gradient(145deg, #000, #0a0e1f);
-            border: 4px solid var(--primary);
-            box-shadow: var(--shadow-glow);
+            background: linear-gradient(145deg, #000, #12052b);
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 30px rgba(0,212,255,0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 700;
             color: var(--accent);
-            position: relative;
         }
 
-        .logo-circle::after {
-            content: '';
-            position: absolute;
-            inset: -10px;
-            border-radius: 50%;
-            border: 2px solid rgba(0,170,255,0.3);
-            animation: pulseRing 3s infinite ease-out;
-        }
-
-        @keyframes pulseRing { 0%,100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.25); opacity: 0; } }
-
-        .title-box { text-align: center; margin-bottom: 40px; }
-
-        h1 {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 2.2rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 700;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            text-shadow: 0 0 20px rgba(0,170,255,0.5);
-        }
-
-        .arrows { color: var(--text-sub); font-size: 1.5rem; letter-spacing: -4px; }
-
-        .subtitle {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--accent);
-            margin: 10px 0 5px;
-        }
-
-        .tagline {
-            font-size: 0.9rem;
-            color: var(--text-sub);
-            font-style: italic;
-            opacity: 0.9;
-        }
-
-        .search-card {
-            background: rgba(10,14,31,0.7);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 30px 25px;
-            margin-bottom: 30px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-        }
+        h1 { font-size: 2.2rem; text-align: center; margin-bottom: 10px; letter-spacing: 2px; color: var(--primary); text-shadow: 0 0 15px rgba(0,212,255,0.4); }
+        .subtitle { text-align: center; font-size: 1.6rem; color: var(--accent); margin-bottom: 30px; }
 
         input {
             width: 100%;
-            background: #05070f;
-            border: 1px solid #1a2540;
-            color: var(--text-main);
-            padding: 18px 20px;
+            padding: 18px;
             font-size: 1.15rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(0,212,255,0.3);
+            color: white;
             border-radius: 12px;
             margin-bottom: 20px;
             transition: all 0.3s;
         }
 
-        input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 5px rgba(0,170,255,0.2);
-        }
-
-        input::placeholder { color: #506080; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0,212,255,0.4); }
 
         .btn-main {
             width: 100%;
-            background: linear-gradient(90deg, var(--primary), #00c0ff);
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), #00b7ff);
             color: white;
             border: none;
-            padding: 18px;
-            font-size: 1.15rem;
-            font-weight: 700;
             border-radius: 12px;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-family: 'Rajdhani', sans-serif;
-            box-shadow: 0 8px 25px rgba(0,170,255,0.5);
             transition: all 0.4s;
+            box-shadow: 0 8px 25px rgba(0,212,255,0.3);
         }
 
-        .btn-main:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 35px rgba(0,170,255,0.7);
-        }
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,212,255,0.5); }
 
-        /* Small Floating WhatsApp Icon Button */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 9999;
-        }
-
-        .whatsapp-float a {
-            display: block;
-            width: 58px;
-            height: 58px;
-            background: #25D366;
-            color: white;
-            border-radius: 50%;
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
-            text-align: center;
-            line-height: 58px;
-            font-size: 1.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .whatsapp-float a:hover {
-            transform: scale(1.15) translateY(-5px);
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.7);
-        }
-
-        .whatsapp-float a:active {
-            transform: scale(0.95);
-        }
-
-        /* Contact Info Section */
-        .contact-info {
-            background: rgba(0,170,255,0.08);
-            border: 1px dashed var(--primary);
-            border-radius: 14px;
-            padding: 20px;
-            margin: 30px 0;
-            text-align: center;
-        }
-
-        .contact-info h3 {
-            color: var(--primary);
-            margin-bottom: 12px;
-            font-size: 1.2rem;
-        }
-
-        .contact-info p { margin: 8px 0; color: var(--text-sub); }
-
-        .contact-info a {
-            color: var(--accent);
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        /* Animated Channel Link */
-        .channel-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            padding: 8px 16px;
-            border-radius: 30px;
-            background: rgba(0, 234, 255, 0.08);
-            border: 1px solid rgba(0, 234, 255, 0.2);
-            transition: all 0.4s;
-            animation: pulseGlow 3s infinite ease-in-out;
-            margin-top: 12px;
-        }
-
-        .channel-link:hover {
-            background: rgba(0, 234, 255, 0.15);
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(0, 234, 255, 0.4);
-        }
-
-        .channel-link i {
-            font-size: 1.3rem;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 15px rgba(0, 234, 255, 0.3); }
-            50% { box-shadow: 0 0 30px rgba(0, 234, 255, 0.6); }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
-
-        #results-area { margin-top: 25px; display: none; }
-        .loader { text-align: center; color: var(--primary); font-size: 2rem; margin: 30px 0; display: none; }
-
+        /* Results - Modern Cards */
         .data-card {
-            background: rgba(10,14,31,0.8);
-            border-left: 6px solid var(--primary);
-            border-radius: 12px;
+            background: rgba(18,5,43,0.7);
+            border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 16px;
             margin-bottom: 20px;
+            padding: 0;
             overflow: hidden;
-            animation: fadeIn 0.6s ease-out;
+            animation: fadeIn 0.6s;
         }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
 
         .dc-header {
-            background: rgba(0,170,255,0.15);
+            background: rgba(0,212,255,0.15);
             padding: 12px 20px;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--primary);
             display: flex;
             justify-content: space-between;
-            font-size: 0.95rem;
         }
 
         .dc-body { padding: 20px; }
 
-        .dc-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px dashed #1a2540;
-        }
+        .dc-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .lbl { color: var(--text-sub); }
+        .val { color: white; font-weight: 500; text-align: right; }
 
-        .dc-row:last-child { border-bottom: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .lbl { color: var(--text-sub); font-weight: 500; font-size: 0.9rem; }
-        .val { color: var(--text-main); font-weight: 600; text-align: right; word-break: break-word; }
+        .whatsapp-float { position: fixed; bottom: 20px; right: 20px; z-index: 999; }
+        .whatsapp-float a { width: 60px; height: 60px; background: var(--whatsapp); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; box-shadow: 0 8px 25px rgba(37,211,102,0.4); transition: all 0.3s; }
+        .whatsapp-float a:hover { transform: scale(1.1); }
 
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            color: var(--text-sub);
-            font-size: 0.9rem;
-        }
-
-        .brand-name {
-            color: var(--accent);
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            margin: 10px 0;
-        }
+        .footer { text-align: center; margin-top: 40px; color: var(--text-sub); font-size: 0.9rem; }
+        .brand-name { color: var(--accent); font-size: 1.4rem; font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
+    <!-- New Modern Banner -->
+    <div class="ramzan-banner">
+        <div class="banner-moon">🌙</div>
+        <div class="banner-lantern">🪔</div>
+        <h2 class="banner-title">رمضان مبارک</h2>
+        <p class="banner-location" id="userLocation">Your Location:, Pakistan</p>
+        <p class="banner-roza">پہلا روزہ – 01 رمضان 2026</p>
         
+        <div class="times-row">
+            <div class="time-card">
+                <div class="time-label">سحری کا آخری وقت</div>
+                <div class="time-value">05:19 AM</div>
+            </div>
+            <div class="time-card">
+                <div class="time-label">افطار کا وقت</div>
+                <div class="time-value">05:53 PM</div>
+            </div>
+        </div>
+
+        <div class="countdown" id="countdown">افطار تک وقت: calculating...</div>
+    </div>
+
+    <!-- Popup -->
+    <div class="ramzan-popup" id="ramzanPopup">
+        <div class="popup-content">
+            <span class="close-btn" id="closePopup">×</span>
+            <div class="popup-moon">🌙</div>
+            <div class="lanterns">
+                <div class="lantern">🪔</div>
+                <div class="lantern">🪔</div>
+            </div>
+            <h2 class="popup-title">MRCRAZY</h2>
+            <div class="arabic">رَمَضَانُ مُبَارَكٌ</div>
+            <p class="popup-text">May this blessed month fill your life with peace, mercy, and countless blessings. 🌙🤲</p>
+            <p class="from-team"> کی جانب سے خلوص دل سے رمضان مبارک!</p>
+        </div>
+    </div>
+
+    <div class="app-container">
         <div class="logo-wrapper">
             <div class="logo-circle">MRC</div>
         </div>
 
         <div class="title-box">
-            <h1>
-                <span class="arrows"><i class="fas fa-chevron-left"></i></span>
-                MRCRAZY OFFICIAL
-                <span class="arrows"><i class="fas fa-chevron-right"></i></span>
-            </h1>
+            <h1>MRCRAZY OFFICIAL</h1>
             <div class="subtitle">Elite Sim Database</div>
-            <p class="tagline">Secure • Premium • Instant Identity Resolution</p>
+            <p class="tagline">Secure • Premium • Instant</p>
         </div>
 
         <div class="search-card">
-            <input type="number" id="target" placeholder="Mobile Number or CNIC (without dashes)">
+            <input type="number" id="target" placeholder="Mobile Number or CNIC (without dashes)" inputmode="numeric">
             <button class="btn-main" onclick="fetchData()">RESOLVE NOW</button>
         </div>
 
-        <div id="loader" class="loader"><i class="fas fa-circle-notch fa-spin"></i></div>
+        <div id="loader" class="loader"><i class="fas fa-circle-notch fa-spin"></i> Loading...</div>
 
         <div id="results-area"></div>
 
         <div class="contact-info">
-            <h3>Data Na Aane Ya Issue Ki Surat Mein</h3>
-            <p>If you do not receive your data under any circumstances, please contact us via WhatsApp.
-💰 Service charges: Rs. 450 only.</p>
-            <p><i class="fab fa-whatsapp"></i> WhatsApp: <a href="https://wa.me/923236876132?text=Hey%20sir%20I%20need%20premium%20data" target="_blank">03236876132</a></p>
+            <h3>Note</h3>
+            <p>Data na mile to WhatsApp pe contact karen.<br>Charges: Rs. 450 only.</p>
+            <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/923236876132?text=Assalam-o-Alaikum%20sir%20premium%20data%20chahiye" target="_blank">03236876132</a></p>
         </div>
 
         <div class="footer">
-            <p>Professional Secure Services</p>
+            <p>Professional Services</p>
             <div class="brand-name">POWERED BY MUHAMMAD NAEEM • 2026</div>
-            
             <a href="https://whatsapp.com/channel/0029VbBwFGO9Bb5s9beJ201f" target="_blank" class="channel-link">
-                <i class="fab fa-whatsapp"></i>
-                Join MrCrazy DevStudio Channel
+                <i class="fab fa-whatsapp"></i> Join Channel
             </a>
         </div>
-
     </div>
 
-    <!-- Small Floating WhatsApp Icon -->
     <div class="whatsapp-float">
-        <a href="https://wa.me/923236876132?text=Hey%20sir%20I%20need%20premium%20data" target="_blank">
+        <a href="https://wa.me/923236876132?text=Hey%20sir%20premium%20data" target="_blank">
             <i class="fab fa-whatsapp"></i>
         </a>
     </div>
 
     <script>
+        // Location (Lahore fallback as per your info)
+        document.getElementById('userLocation').textContent = "Your Location:, Pakistan";
+
+        // Popup
+        const popup = document.getElementById('ramzanPopup');
+        const closePopup = document.getElementById('closePopup');
+
+        window.onload = () => {
+            popup.classList.add('show');
+            setTimeout(() => popup.classList.remove('show'), 10000);
+            updateCountdown();
+        };
+
+        closePopup.onclick = () => popup.classList.remove('show');
+        popup.onclick = (e) => { if (e.target === popup) popup.classList.remove('show'); };
+
+        // Countdown (Iftar 05:53 PM)
+        function updateCountdown() {
+            const countdownEl = document.getElementById('countdown');
+            const iftar = new Date();
+            iftar.setHours(17, 53, 0, 0);
+            if (new Date() > iftar) iftar.setDate(iftar.getDate() + 1);
+
+            setInterval(() => {
+                const diff = iftar - new Date();
+                if (diff <= 0) {
+                    countdownEl.textContent = "افطار کا وقت ہو گیا! 🌙";
+                    return;
+                }
+                const h = Math.floor(diff / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                countdownEl.textContent = `افطار تک: ${h} گھنٹے ${m} منٹ ${s} سیکنڈ`;
+            }, 1000);
+        }
+
+        // Fetch same
         const API_URL = "https://sim.f-a-k.workers.dev/?q=";
-        
         const loader = document.getElementById('loader');
         const resArea = document.getElementById('results-area');
         const input = document.getElementById('target');
 
         async function fetchData() {
             let query = input.value.trim();
-            if (query.length < 10) {
-                alert("Valid Mobile Number (11 digits) ya CNIC enter karen.");
-                return;
-            }
+            if (query.length < 10) return alert("Valid number ya CNIC daalen.");
 
             resArea.innerHTML = '';
             resArea.style.display = 'block';
@@ -393,49 +348,36 @@
 
             try {
                 await new Promise(r => setTimeout(r, 1200));
-
-                const req = await fetch(API_URL + query);
-                const json = await req.json();
-                
+                const res = await fetch(API_URL + query);
+                const json = await res.json();
                 loader.style.display = 'none';
 
-                if (json.status === 'success') {
-                    renderCards(json.data);
-                } else {
-                    resArea.innerHTML = `<div style="text-align:center; color:#ff6666; font-weight:600; margin:20px 0;">No Data Found – WhatsApp pe rabta karen for premium access!</div>`;
-                }
+                if (json.status === 'success') renderCards(json.data);
+                else resArea.innerHTML = '<div style="text-align:center; color:#ff6666; padding:20px;">No Data – WhatsApp Contact Karen!</div>';
             } catch (e) {
                 loader.style.display = 'none';
-                resArea.innerHTML = `<div style="text-align:center; color:#ff6666; font-weight:600; margin:20px 0;">Connection Error – Contact WhatsApp: 03236876132</div>`;
+                resArea.innerHTML = '<div style="text-align:center; color:#ff6666; padding:20px;">Error – WhatsApp: 03236876132</div>';
             }
         }
 
         function renderCards(data) {
-            let records = Array.isArray(data) ? data : (data ? [data] : []);
-            let html = '';
-
-            records.forEach((rec, idx) => {
-                html += `
+            let records = Array.isArray(data) ? data : [data].filter(Boolean);
+            let html = records.map((rec, i) => `
                 <div class="data-card">
                     <div class="dc-header">
-                        <span>RECORD #${idx + 1}</span>
-                        <span><i class="fas fa-shield-check"></i> VERIFIED</span>
+                        <span>Record #${i+1}</span>
+                        <span><i class="fas fa-check-circle"></i> Verified</span>
                     </div>
                     <div class="dc-body">
-                `;
-                for (const [key, val] of Object.entries(rec)) {
-                    if (['response_code', 'credit', 'api_owner'].includes(key)) continue;
-                    html += `
-                        <div class="dc-row">
-                            <span class="lbl">${key.toUpperCase()}</span>
-                            <span class="val">${val || 'N/A'}</span>
-                        </div>
-                    `;
-                }
-                html += `</div></div>`;
-            });
+                        ${Object.entries(rec).map(([k,v]) => {
+                            if (['response_code','credit','api_owner'].includes(k)) return '';
+                            return `<div class="dc-row"><span class="lbl">${k.toUpperCase()}</span><span class="val">${v || 'N/A'}</span></div>`;
+                        }).join('')}
+                    </div>
+                </div>
+            `).join('');
 
-            resArea.innerHTML = html || `<div style="text-align:center; color:#ffcc00; margin:25px 0;">No records available at this time.</div>`;
+            resArea.innerHTML = html || '<div style="text-align:center; color:#ffcc00; padding:25px;">No records found.</div>';
         }
 
         input.addEventListener("keypress", e => { if (e.key === "Enter") fetchData(); });
