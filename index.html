@@ -87,7 +87,7 @@
             text-shadow: 0 0 10px rgba(212,175,55,0.5);
         }
 
-        /* Rest of the premium styles remain the same as before (popup, app-container, cards, etc.) */
+        /* All other styles (popup, app-container, cards, WhatsApp float) same as previous premium version - no changes */
         .ramzan-popup { position: fixed; inset: 0; background: rgba(8, 4, 28, 0.96); display: flex; align-items: center; justify-content: center; z-index: 9999; opacity: 0; visibility: hidden; transition: opacity 1s ease; }
         .ramzan-popup.show { opacity: 1; visibility: visible; }
         .popup-content { background: linear-gradient(145deg, #140d38, #0b0528); border: 3px solid var(--gold); border-radius: 28px; padding: 40px 28px; max-width: 360px; width: 92%; text-align: center; box-shadow: 0 0 80px rgba(212,175,55,0.6), inset 0 0 30px rgba(0,196,180,0.15); position: relative; animation: popupScale 1.2s ease-out; overflow: hidden; }
@@ -148,24 +148,24 @@
     <div class="ramzan-banner">
         <h2 class="banner-title">رمضان مبارک</h2>
         <p class="banner-location" id="userLocation">Your Location: Detecting...</p>
-        <p class="banner-roza">3 رمضان 1447 – 21 فروری 2026 (آج کا روزہ)</p>
+        <p class="banner-roza" id="bannerRoza">Calculating today's Roza...</p>
 
         <div class="times-row">
             <div class="time-card">
                 <div class="time-label">سحری کا آخری وقت</div>
-                <div class="time-value" id="sehriTime">05:17 AM</div>
+                <div class="time-value" id="sehriTime">05:16 AM</div>
             </div>
             <div class="time-card">
                 <div class="time-label">افطار کا وقت</div>
-                <div class="time-value" id="iftarTime">05:54 PM</div>
+                <div class="time-value" id="iftarTime">05:55 PM</div>
             </div>
         </div>
 
-        <div class="countdown" id="countdown">افطار تک وقت: calculating...</div>
+        <div class="countdown" id="countdown">اگلی نماز تک وقت: calculating...</div>
         <div class="next-prayer" id="nextPrayer">اگلی نماز: calculating...</div>
     </div>
 
-    <!-- Beautiful Popup remains the same -->
+    <!-- Popup same -->
     <div class="ramzan-popup" id="ramzanPopup">
         <div class="popup-content">
             <span class="close-btn" id="closePopup">×</span>
@@ -221,37 +221,58 @@
         window.onload = () => {
             popup.classList.add('show');
             setTimeout(() => popup.classList.remove('show'), 12000);
-            detectLocation();
+            detectLocationAndUpdateBanner();
             updatePrayerCountdown();
         };
         closePopup.onclick = () => popup.classList.remove('show');
         popup.onclick = (e) => { if (e.target === popup) popup.classList.remove('show'); };
 
-        // Location detection same
-        async function detectLocation() {
+        // Location detection + dynamic Roza calculation
+        async function detectLocationAndUpdateBanner() {
             const locEl = document.getElementById('userLocation');
+            const rozaEl = document.getElementById('bannerRoza');
             locEl.textContent = "Your Location: Detecting...";
+
+            let city = 'Lahore';
+            let region = 'Punjab, Pakistan';
+
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
                     const { latitude, longitude } = pos.coords;
                     try {
                         const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`);
                         const data = await res.json();
-                        const city = data.address.city || data.address.town || data.address.state_district || 'Unknown';
-                        const region = data.address.state || 'Pakistan';
+                        city = data.address.city || data.address.town || data.address.state_district || 'Lahore';
+                        region = data.address.state || 'Pakistan';
                         locEl.textContent = `Your Location: ${city}, ${region}`;
                     } catch {
                         locEl.textContent = 'Your Location: Lahore, Punjab, Pakistan';
                     }
+                    updateRozaAndTimes(city); // Update roza & times after location
                 }, () => {
                     locEl.textContent = 'Your Location: Lahore, Punjab, Pakistan';
+                    updateRozaAndTimes('Lahore');
                 });
             } else {
                 locEl.textContent = 'Your Location: Lahore, Punjab, Pakistan';
+                updateRozaAndTimes('Lahore');
             }
         }
 
-        // Updated: Full 5 prayers countdown to next one
+        function updateRozaAndTimes(city) {
+            const today = new Date();
+            const ramadanStart = new Date(2026, 1, 19); // 19 Feb 2026 = 1 Ramadan (Pakistan)
+            const diffDays = Math.floor((today - ramadanStart) / (1000 * 60 * 60 * 24)) + 1;
+            const rozaNumber = (diffDays > 0 && diffDays <= 30) ? diffDays : 'Calculating...';
+
+            document.getElementById('bannerRoza').textContent = `${rozaNumber} رمضان  – ${today.toLocaleDateString('ur-PK', {day: 'numeric', month: 'long', year: 'numeric'})} (آج کا روزہ)`;
+
+            // Sehri/Iftar for 22 Feb 2026 Lahore (Hanafi) - can be made dynamic later with API
+            document.getElementById('sehriTime').textContent = '05:16 AM';
+            document.getElementById('iftarTime').textContent = '05:55 PM';
+        }
+
+        // Full prayers countdown to next one
         function updatePrayerCountdown() {
             const countdownEl = document.getElementById('countdown');
             const nextPrayerEl = document.getElementById('nextPrayer');
@@ -277,7 +298,6 @@
                 }
             }
 
-            // If all today's prayers passed, next is tomorrow's Fajr
             if (nextIndex === 0 && now > targetTime) {
                 targetTime.setDate(targetTime.getDate() + 1);
             }
