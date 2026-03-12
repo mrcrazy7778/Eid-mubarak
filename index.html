@@ -91,6 +91,67 @@ body::after {
 }
 @keyframes orbFloat { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(-30px, 40px) scale(1.05); } 66% { transform: translate(20px, -20px) scale(0.95); } }
 
+/* Premium picture frame with neon glow */
+.premium-frame {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 24px;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 
+    0 0 30px rgba(0, 255, 136, 0.5),
+    inset 0 0 20px rgba(0, 255, 136, 0.3);
+  animation: framePulse 6s ease-in-out infinite;
+}
+
+.frame-glow-outer {
+  position: absolute;
+  inset: -12px;
+  border-radius: 34px;
+  background: radial-gradient(circle at 30% 30%, rgba(0,255,136,0.4), transparent 60%);
+  opacity: 0.6;
+  pointer-events: none;
+  animation: glowRotate 12s linear infinite;
+}
+
+.frame-glow-inner {
+  position: absolute;
+  inset: 4px;
+  border: 2px solid rgba(0,255,136,0.7);
+  border-radius: 24px;
+  box-shadow: 
+    inset 0 0 15px rgba(0,255,136,0.6),
+    0 0 25px rgba(0,255,136,0.45);
+  pointer-events: none;
+}
+
+.framed-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 24px;
+  border: 3px solid rgba(0,255,136,0.35);
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.4s ease;
+}
+
+.premium-frame:hover .framed-logo {
+  transform: scale(1.06);
+}
+
+@keyframes framePulse {
+  0%, 100% { box-shadow: 0 0 30px rgba(0,255,136,0.5), inset 0 0 20px rgba(0,255,136,0.3); }
+  50%      { box-shadow: 0 0 50px rgba(0,255,136,0.7), inset 0 0 30px rgba(0,255,136,0.5); }
+}
+
+@keyframes glowRotate {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Popup */
 .popup-overlay {
   position: fixed; inset: 0;
@@ -254,7 +315,7 @@ body::after {
 @keyframes textFade { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
 /* Status */
-.status-msg { text-align: center; padding: 12px; font-family: 'Share Tech Mono', monospace; font-size: 12px; letter-spacing: 2px; color: var(--g1); display: none; }
+.status-msg { text-align: center; padding: 12px; font-family: 'Share Tech Mono', monospace; font-size: 12px; letter-spacing: 2px; color: var(--g1); display: none; white-space: pre-line; }
 .status-msg.active { display: block; }
 .status-msg.error { color: #ff4d6a; }
 
@@ -423,10 +484,19 @@ body::after {
     <div class="logo-wrapper">
       <div class="logo-ring"></div>
       <div class="logo-ring-2"></div>
-      <img src=" alt="MrCrazyTeam" class="header-logo" onerror="this.src='https://placehold.co/90x90/00ff88/050e0a?text=MC&font=Orbitron'">
+      
+      <!-- Khubsurat framed picture -->
+      <div class="premium-frame">
+        <div class="frame-glow-outer"></div>
+        <div class="frame-glow-inner"></div>
+        <img src="https://i.ibb.co/HpNQ3jVV/IMG-20260305-074448-524.jpg" 
+             alt="MrCrazyTeam Premium" 
+             class="framed-logo">
+      </div>
     </div>
+    
     <div class="hero-title">
-      <span class="hl-green">MrCrazy</span> <span class="hl-white">Team</span>
+      <span class="hl-green">MrCrazy</span> <span class="hl-white">Official</span>
     </div>
     <div class="hero-badge">
       <div class="badge-dot"></div>
@@ -545,7 +615,7 @@ async function executeSearch() {
     scanner.classList.remove('active');
 
     if (!data.success || !data.result || data.result.length === 0) {
-      setStatus('⚠ KOI RECORD NAHI MILA — NUMBER CHECK KARO', true);
+      setStatus('⚠ کوئی ریکارڈ نہیں ملا — وہاٹس ایپ پر رابطہ کریں ', true);
       return;
     }
 
